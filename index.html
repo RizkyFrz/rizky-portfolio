@@ -7,12 +7,16 @@
 <meta name="description" content="Portofolio Muhammad Rizky Fadillah, lulusan SMK Wikrama Bogor jurusan TJKT dengan fokus pada networking dan cyber security.">
 <meta name="theme-color" content="#0E1012">
 <link rel="icon" type="image/png" sizes="1024x1024" href="icon/favicon.png">
-<link rel="canonical" href="https://rizkyfrz.github.io/">
+<link rel="canonical" href="https://rizkyf-web.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Muhammad Rizky Fadillah – Portofolio">
 <meta property="og:description" content="IT Enthusiast di bidang Networking &amp; Cyber Security.">
-<meta property="og:url" content="https://rizkyfrz.github.io/">
-<meta property="og:image" content="https://rizkyfrz.github.io/Image/foto%202.jpg">
+<meta property="og:url" content="https://rizkyf-web.vercel.app/">
+<meta property="og:image" content="https://rizkyf-web.vercel.app/Image/foto%202.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Muhammad Rizky Fadillah – Portofolio">
+<meta name="twitter:description" content="IT Enthusiast di bidang Networking &amp; Cyber Security.">
+<meta name="twitter:image" content="https://rizkyf-web.vercel.app/Image/foto%202.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -117,6 +121,7 @@
     <div class="hero-dots"></div>
     <div class="hero-glow"></div>
     <div class="hero-glow g2"></div>
+    <div class="hero-light"></div>
   </div>
 
   <div class="wrap hero-inner">
@@ -144,6 +149,7 @@
 
       <!-- ===== Diagram desktop ===== -->
       <svg class="net-svg net-d" viewBox="0 0 1000 340" role="group" data-i18n-attr="aria-label:net.aria.d" aria-label="Ilustrasi topologi jaringan: workstation dan laptop terhubung ke network switch, lalu ke router dan internet. Server terhubung ke switch.">
+        <rect class="zone" x="30" y="14" width="430" height="318" rx="10"/><text class="zone-lbl" x="446" y="36">LAN</text>
         <g class="wires">
           <path class="wire" pathLength="1" style="--d:.35s" data-rel="workstation switch" d="M135 72 H222 V162 H285"/>
           <path class="wire" pathLength="1" style="--d:.4s" data-rel="laptop switch" d="M135 235 H222 V162 H285"/>
@@ -233,6 +239,7 @@
 
       <!-- ===== Diagram mobile / tablet ===== -->
       <svg class="net-svg net-m" viewBox="0 0 360 456" role="group" data-i18n-attr="aria-label:net.aria.m" aria-label="Ilustrasi topologi jaringan: workstation, laptop, dan server terhubung ke network switch, lalu ke router dan internet.">
+        <rect class="zone" x="4" y="6" width="352" height="238" rx="10"/><text class="zone-lbl zs" x="16" y="234">LAN</text>
         <g class="wires">
           <path class="wire" pathLength="1" style="--d:.35s" data-rel="workstation switch" d="M60 118 V152 H180 V186"/>
           <path class="wire" pathLength="1" style="--d:.4s" data-rel="laptop switch" d="M180 118 V186"/>
@@ -349,9 +356,9 @@
       <h2 data-i18n="skills.title">Keahlian</h2>
     </div>
     <div class="skills">
-      <div class="skill-row reveal"><h3><span class="n" aria-hidden="true">A</span><span data-i18n="skill.a">Sistem &amp; virtualisasi</span></h3><ul><li>Linux</li><li>Virtual Machine</li><li data-i18n="skill.infra">Infrastruktur IT</li></ul></div>
-      <div class="skill-row reveal"><h3><span class="n" aria-hidden="true">B</span><span data-i18n="skill.b">Jaringan &amp; wireless</span></h3><ul><li>MikroTik</li><li>Wireless Networking</li></ul></div>
-      <div class="skill-row reveal"><h3><span class="n" aria-hidden="true">C</span><span data-i18n="skill.c">Cloud &amp; keamanan</span></h3><ul><li>Cloud Computing</li><li>Cyber Security</li></ul></div>
+      <div class="skill-row spot reveal"><h3><span class="n" aria-hidden="true">A</span><span data-i18n="skill.a">Sistem &amp; virtualisasi</span></h3><ul><li>Linux</li><li>Virtual Machine</li><li data-i18n="skill.infra">Infrastruktur IT</li></ul></div>
+      <div class="skill-row spot reveal"><h3><span class="n" aria-hidden="true">B</span><span data-i18n="skill.b">Jaringan &amp; wireless</span></h3><ul><li>MikroTik</li><li>Wireless Networking</li></ul></div>
+      <div class="skill-row spot reveal"><h3><span class="n" aria-hidden="true">C</span><span data-i18n="skill.c">Cloud &amp; keamanan</span></h3><ul><li>Cloud Computing</li><li>Cyber Security</li></ul></div>
     </div>
   </div>
 </section>
@@ -397,7 +404,7 @@
       <p class="idx" aria-hidden="true"><span>04</span> <span data-i18n="idx.cv">Unduhan</span></p>
       <h2>Curriculum Vitae</h2>
     </div>
-    <div class="cv-card reveal">
+    <div class="cv-card spot reveal">
       <svg class="cv-doc" viewBox="0 0 96 124" aria-hidden="true">
         <path class="sheet" d="M8 4h56l24 24v92H8z"/>
         <path class="fold" d="M64 4v24h24"/>
@@ -448,7 +455,7 @@
         <li class="reveal"><a href="https://wa.me/6281213131294" target="_blank" rel="noopener">WhatsApp</a></li>
       </ul>
     </div>
-    <form class="form reveal" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+    <form class="form spot reveal" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
       <input type="hidden" name="access_key" value="bf78c528-8cf5-4125-993f-52bb9dce8d02">
       <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="field"><label for="name" data-i18n="form.name">Nama</label><input type="text" id="name" name="name" autocomplete="name" placeholder="Nama lengkap Anda" data-i18n-attr="placeholder:form.name.ph" required></div>
@@ -471,6 +478,8 @@
     </ul>
   </div>
 </footer>
+
+<button type="button" class="to-top" id="toTop" aria-label="Kembali ke atas" data-i18n-attr="aria-label:top.aria"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <dialog class="lightbox" id="lightbox" aria-label="Pratinjau sertifikat" data-i18n-attr="aria-label:lb.aria">
   <div class="lb-bar">

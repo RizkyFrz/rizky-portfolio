@@ -36,11 +36,16 @@
   }
 
   /* Indikator progres scroll (rAF, tanpa loop terus-menerus) */
-  const bar = $('#progress');
+  const bar = $('#progress'), header = $('.site-header'), toTop = $('#toTop'), heroFx = $('.hero-fx');
+  const calmMq = matchMedia('(prefers-reduced-motion: reduce)');
   let ticking = false;
   const upd = () => {
-    const max = root.scrollHeight - innerHeight;
-    bar.style.setProperty('--p', max > 0 ? Math.min(scrollY / max, 1) : 0);
+    const y = scrollY, max = root.scrollHeight - innerHeight;
+    bar.style.setProperty('--p', max > 0 ? Math.min(y / max, 1) : 0);
+    header.classList.toggle('scrolled', y > 8);
+    toTop.classList.toggle('show', y > innerHeight * .9);
+    /* Parallax halus: hanya cahaya latar hero, hanya saat hero masih terlihat */
+    if (heroFx && y < 1400 && !calmMq.matches) heroFx.style.setProperty('--par', y);
     ticking = false;
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(upd); } }, { passive: true });
@@ -58,6 +63,7 @@
     toggle.setAttribute('aria-expanded', open);
     toggle.setAttribute('aria-label', t(open ? 'menu.close' : 'menu.open'));
   };
+  $$('li', list).forEach((li, i) => li.style.setProperty('--k', i));
   toggle.addEventListener('click', () => setMenu(!list.classList.contains('open')));
   $$('a', list).forEach(a => a.addEventListener('click', () => setMenu(false)));
   document.addEventListener('keydown', e => {
@@ -94,6 +100,7 @@
   } else {
     $$('.reveal').forEach(el => el.classList.add('in'));
   }
+  $$('.exp-list, .skill-row ul, .facts').forEach(g => [...g.children].forEach((c, i) => c.style.setProperty('--k', Math.min(i, 8))));
 
   /* Diagram jaringan: fokus perangkat + jeda animasi saat tidak perlu */
   let refreshCap = () => {};
@@ -115,8 +122,16 @@
     const select = name => {
       nets.forEach(svg => {
         if (name) svg.dataset.focus = name; else delete svg.dataset.focus;
-        $$('.dev', svg).forEach(d => d.classList.toggle('is-on', d.dataset.dev === name));
-        $$('[data-rel]', svg).forEach(p => p.classList.toggle('is-rel', !!name && p.dataset.rel.split(' ').includes(name)));
+        const near = new Set();
+        $$('[data-rel]', svg).forEach(p => {
+          const rel = p.dataset.rel.split(' '), hit = !!name && rel.includes(name);
+          p.classList.toggle('is-rel', hit);
+          if (hit) rel.forEach(r => { if (r !== name) near.add(r); });
+        });
+        $$('.dev', svg).forEach(d => {
+          d.classList.toggle('is-on', d.dataset.dev === name);
+          d.classList.toggle('is-nb', near.has(d.dataset.dev));
+        });
       });
       current = name || null;
       showCap();
@@ -158,18 +173,42 @@
   /* Lightbox sertifikat (<dialog> menutup dengan Escape secara native) */
   const lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCaption'), lbPdf = $('#lbPdf');
   let opener = null;
+  const loaded = () => lb.classList.remove('loading');
   $$('.cert').forEach(btn => btn.addEventListener('click', () => {
     const img = $('img', btn);
     opener = btn;
+    lb.classList.add('loading');
+    lbImg.onload = lbImg.onerror = loaded;
     lbImg.src = img.currentSrc || img.src;
+    if (lbImg.complete && lbImg.naturalWidth) loaded();
     lbImg.alt = img.alt;
     lbCap.textContent = btn.dataset.caption;
     lbPdf.href = btn.dataset.pdf;
     typeof lb.showModal === 'function' ? lb.showModal() : window.open(btn.dataset.pdf, '_blank', 'noopener');
   }));
-  $('#lbClose').addEventListener('click', () => lb.close());
-  lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
-  lb.addEventListener('close', () => { lbImg.src = ''; if (opener) opener.focus(); });
+  /* Penutupan dengan animasi singkat; Escape, tombol Tutup, dan klik latar memakai jalur yang sama */
+  let closing = false;
+  const closeLb = () => {
+    if (!lb.open || closing) return;
+    if (calmMq.matches) { lb.close(); return; }
+    closing = true;
+    lb.classList.add('closing');
+    let tm = 0;
+    const done = () => {
+      clearTimeout(tm);
+      lb.removeEventListener('animationend', onEnd);
+      closing = false;
+      lb.classList.remove('closing');
+      if (lb.open) lb.close();
+    };
+    const onEnd = e => { if (e.target === lb) done(); };
+    lb.addEventListener('animationend', onEnd);
+    tm = setTimeout(done, 400);
+  };
+  $('#lbClose').addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  lb.addEventListener('cancel', e => { e.preventDefault(); closeLb(); });
+  lb.addEventListener('close', () => { lbImg.onload = lbImg.onerror = null; lb.classList.remove('loading'); lbImg.src = ''; if (opener) opener.focus(); });
 
   /* Formulir Web3Forms: status hanya ditampilkan setelah server menjawab */
   const form = $('#contactForm'), status = $('#formStatus'), btn = $('#submitBtn');
@@ -196,6 +235,7 @@
     if (btn.disabled) return;
     if (!form.checkValidity()) { form.reportValidity(); return; }
     btn.disabled = true;
+    btn.setAttribute('aria-busy', 'true');
     say('status.sending');
     try {
       const res = await fetch(form.action, {
@@ -214,6 +254,7 @@
       say('status.net', 'err');
     } finally {
       btn.disabled = false;
+      btn.removeAttribute('aria-busy');
     }
   });
 
@@ -258,7 +299,7 @@
       'cv.desc': 'A summary of my profile, work experience, school projects, academic history, and certifications on a single PDF page.',
       'cv.meta': 'PDF · 1 page', 'cv.view': 'View CV', 'cv.download': 'Download CV',
       'nav.home': 'Home', 'nav.about': 'About', 'nav.skills': 'Skills', 'nav.certs': 'Certificates', 'nav.contact': 'Contact',
-      'menu.open': 'Open menu', 'menu.close': 'Close menu',
+      'menu.open': 'Open menu', 'menu.close': 'Close menu', 'top.aria': 'Back to top',
       'theme.toLight': 'Switch to light mode', 'theme.toDark': 'Switch to dark mode',
       'hero.desc': "I'm interested in technology, especially computer networking, and I keep deepening my knowledge and skills in this field.",
       'hero.cta1': 'Contact me', 'hero.cta2': 'View certificates',
@@ -375,4 +416,54 @@
     });
     vis.addEventListener('animationend', e => { if (e.animationName === 'photo-glint') vis.classList.remove('glint'); });
   }
+
+  /* ===== Efek pointer (hanya mouse): spotlight kartu, tombol magnetik, cahaya hero.
+     Satu listener terdelegasi, diproses lewat rAF; tidak ada loop yang berjalan terus-menerus. ===== */
+  const hero = $('.hero');
+  let fxRaf = 0, fxEv = null, lastBtn = null;
+  const resetBtn = b => { b.style.removeProperty('--bx'); b.style.removeProperty('--by'); };
+  const runFx = () => {
+    fxRaf = 0;
+    const e = fxEv;
+    if (!e || !(e.target instanceof Element)) return;
+    const spot = e.target.closest('.spot');
+    if (spot) {
+      const r = spot.getBoundingClientRect();
+      spot.style.setProperty('--mx', (e.clientX - r.left).toFixed(0) + 'px');
+      spot.style.setProperty('--my', (e.clientY - r.top).toFixed(0) + 'px');
+    }
+    const b = e.target.closest('.btn');
+    if (lastBtn && lastBtn !== b) resetBtn(lastBtn);
+    if (b && !b.disabled) {
+      const r = b.getBoundingClientRect();
+      b.style.setProperty('--bx', (((e.clientX - r.left) / r.width - .5) * 8).toFixed(1) + 'px');
+      b.style.setProperty('--by', (((e.clientY - r.top) / r.height - .5) * 6).toFixed(1) + 'px');
+    }
+    lastBtn = b;
+    if (hero) {
+      const inHero = hero.contains(e.target);
+      if (inHero) {
+        const r = hero.getBoundingClientRect();
+        hero.style.setProperty('--hx', (e.clientX - r.left).toFixed(0) + 'px');
+        hero.style.setProperty('--hy', (e.clientY - r.top).toFixed(0) + 'px');
+      }
+      hero.classList.toggle('lit', inHero);
+    }
+  };
+  document.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse' || calmMq.matches) return;
+    fxEv = e;
+    if (!fxRaf) fxRaf = requestAnimationFrame(runFx);
+  }, { passive: true });
+  root.addEventListener('pointerleave', () => {
+    if (lastBtn) { resetBtn(lastBtn); lastBtn = null; }
+    if (hero) hero.classList.remove('lit');
+  });
+
+  /* Kembali ke atas (fokus dipindah ke merek agar tidak hilang saat tombol tersembunyi) */
+  toTop.addEventListener('click', () => {
+    scrollTo(0, 0);
+    const brand = $('.brand');
+    if (brand) brand.focus({ preventScroll: true });
+  });
 })();

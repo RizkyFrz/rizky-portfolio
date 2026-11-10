@@ -2,7 +2,7 @@
 
 Website portofolio pribadi untuk memperkenalkan profil, pendidikan, pengalaman kerja, CV, sertifikat, serta kompetensi di bidang **Teknik Jaringan Komputer dan Telekomunikasi (TJKT)**, networking, infrastruktur IT, Linux, cloud computing, dan cyber security.
 
-- **Live website:** https://rizkyfrz.github.io/
+- **Live website:** https://rizkyf-web.vercel.app/
 - **Dibuat dengan:** HTML, CSS, dan JavaScript vanilla
 - **Gaya desain:** Dark Technical Editorial dengan aksen cyan
 - **Tema:** Mode gelap dan terang
