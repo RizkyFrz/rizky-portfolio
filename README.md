@@ -1,6 +1,6 @@
 # Muhammad Rizky Fadillah — Personal Portfolio
 
-Website portofolio pribadi untuk memperkenalkan profil, pendidikan, pengalaman kerja, CV, sertifikat, serta kompetensi di bidang **Teknik Jaringan Komputer dan Telekomunikasi (TJKT)**, networking, infrastruktur IT, Linux, cloud computing, dan cyber security.
+Website portofolio pribadi untuk memperkenalkan profil, pendidikan, pengalaman kerja, CV, sertifikat, serta kompetensi di bidang **Teknik Jaringan Komputer dan Telekomunikasi (TJKT)**, networking, infrastruktur IT, Linux, cloud computing, dan dasar keamanan jaringan.
 
 - **Live website:** https://rizkyf-web.vercel.app/
 - **Dibuat dengan:** HTML, CSS, dan JavaScript vanilla
